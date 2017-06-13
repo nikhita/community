@@ -393,7 +393,7 @@ Then we can validate the status against the sub-schema easily. Hence, this propo
 
 Apiextensions-apiserver uses the normal REST endpoint implementation and only customizes the registry and the codecs. The admission plugins are inherited from the kube-apiserver (when running inside of it via apiserver delegation) and therefore they are supposed to apply to CRs as well.
 
-The webhook admission prototyped at https://github.com/kubernetes/kubernetes/pull/46316 is expected to work with CRs out of the box. Hence, for more advanced validation the webhook admission is an option as well (when it is merged).
+It is [verified](https://github.com/kubernetes/kubernetes/pull/47252) that CRDs work well with initializers. Thus webhook admission prototyped at https://github.com/kubernetes/kubernetes/pull/46316 is also expected to work with CRs out of the box. Hence, for more advanced validation webhook admission is an option as well (when it is merged).
 
 Clearly, providing such a webhook is more complex and therefore cannot replace a built-in JSON-Schema validation and its use-cases.
 
