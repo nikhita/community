@@ -342,7 +342,7 @@ The server-side validation is carried out after sending the request to the apiex
 
 We do a schema pass there using the https://github.com/go-openapi/validate validator with the provided schema in the corresponding CRD. Validation errors are returned to the caller as for native resources.
 
-JSON-Schema also allows us to reject additional fields that are not defined in the schema and only allow the fields that are specified. This can be achieved by using `"additionalProperties": false` in the schema.
+JSON-Schema also allows us to reject additional fields that are not defined in the schema and only allow the fields that are specified. This can be achieved by using `"additionalProperties": false` in the schema. However, there is danger in allowing CRD authors to set `"additionalProperties": false` because it breaks version skew (new client can send new optional fields to the old server). So we should not allow CRD authors to set `"additionalProperties": false`.
 
 ### Client-Side Validation
 
@@ -371,7 +371,11 @@ If the schema is made stricter later, the existing CustomResources might no long
 
 To avoid this, it is the responsibility of the user to make sure that any changes made to the schema are such that the existing CustomResources remain validated. 
  
-Note: This is the same behavior that we require for native resources. Validation cannot be made stricter in later Kubernetes versions without breaking compatibility.
+Note:
+
+1. This is the same behavior that we require for native resources. Validation cannot be made stricter in later Kubernetes versions without breaking compatibility.
+
+2. For migration of CRDs with no validation to CRDs with validation, we can create a controller that will validate and annotate invalid CRs once the spec changes, so that the custom controller can choose to delete them (this is also essentially the status condition of the CRD). This can be achieved, but it is not part of the proposal.
 
 ### Outlook to Status Sub-Resources
 
