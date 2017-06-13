@@ -46,6 +46,7 @@ Currently we do not provide validation for CustomResources (CR), i.e. the CR pay
 2. To keep open the door to add other validation mechanisms later.<sup id="f2">[2](#footnote2)</sup>
 3. To allow server-side validation.
 4. To be able to integrate into the existing client-side validation of kubectl.
+5. To be able to define defaults in the specification (at least in a follow-up of basic validation support).
 
 ## Non-Goals
 
@@ -402,10 +403,14 @@ The implementation is planned in the following steps:
 
 1. Add the proposed types to the v1beta1<sup id="f3">[3](#footnote3)</sup> version of the CRD type.
 2. Add a validation step to the CREATE and UPDATE REST handlers of the apiextensions-apiserver.
+
+Independently, from 1. and 2. add defaulting support:
+
+3. [Add defaulting support to go-openapi](https://github.com/go-openapi/validate/pull/27). Before this PR, we will reject JSON-Schemas which define defaults.
  
 As an optional follow-up, we can implement the OpenAPI part and with that enable client-side validation:
 
-3. Export the JSON-Schema via a dynamically served OpenAPI spec.
+4. Export the JSON-Schema via a dynamically served OpenAPI spec.
 
 ## Appendix
 
